@@ -28,3 +28,5 @@ class SpotScraper:
 
             return (tracks)  # see spot test for example on how to get specific track information
 
+    #similar functions for other data retrievals need to be written (See API reference for exact functionalities)
+    
