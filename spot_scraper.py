@@ -4,6 +4,7 @@ from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy.util as util
 
 
+
 class SpotScraper:
     def __init__(self):
         self.client_credentials_manager = SpotifyClientCredentials('327541285c7343afbf4822dc9d30ef7f',client_secret='713dbe89b2ea4bd382fb0a7b366a63bb')
@@ -29,4 +30,3 @@ class SpotScraper:
             return (tracks)  # see spot test for example on how to get specific track information
 
     #similar functions for other data retrievals need to be written (See API reference for exact functionalities)
-    
