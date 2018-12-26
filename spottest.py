@@ -12,6 +12,7 @@ client_credentials_manager = SpotifyClientCredentials('327541285c7343afbf4822dc9
 spotify = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 spotify.trace = False
 
+<<<<<<< HEAD
 def spotsearch_track(trackname):
     results = spotify.search(q='track:' + trackname, type='track')
     items = results['tracks']['items']
@@ -52,7 +53,6 @@ def get_recommendations():
     recs=recs['tracks']
     for track in recs:
         print (track['name'] + " - " + track['artists'][0]['name'] + " - " + track['album']['name'])
-
 
 def get_audio_features(songname):
     results = spotify.search(q='track:' + songname, type='track')
