@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+	<title></title>
+	<script>
+var Inc = 0;
+var InsertButton;
+var InsertNames;
+var InsertValues;
+var SearchButton;
+var SearchNames;
+var UpdateAttributes;
+var UpdateValues;
+var UpdateCondition;
+var DeleteAttributes;
+var DeleteCondition;
+var TableNames = ["Users","TopSongsMeta","Spotify","SoundCloud","Youtube","Pandora"];
+
+function refreshUserValues(){
+    DropDownBox = document.getElementById("DropDownBox");
+    InsertButton = document.getElementById("InsertButton");
+    InsertNames = document.getElementById("FieldNames");
+    InsertValues = document.getElementById("FieldValues");
+    SearchButton = document.getElementById("SearchButton");
+    SearchValue = document.getElementById("SearchText");
+    SearchNames = document.getElementById("AttributeNames");
+    UpdateAttributes = document.getElementById("UpdateAttributes");
+    UpdateValues= document.getElementById("UpdateValues");
+    UpdateCondition= document.getElementById("UpdateCondition");
+    DeleteAttributes = document.getElementById("DeleteAttributes");
+    DeleteCondition = document.getElementById("DeleteCondition");
+}
+function InsertListener() {
+    refreshUserValues();
+    var selectedTable = TableNames[DropDownBox.value];
+    //document.getElementById("Display").innerHTML = "INSERT: " + InsertNames.value + " , " + InsertValues.value + " INTO " + selectedTable;
+    var url= "http://smalldata411.web.illinois.edu/insert-query/?InsertAttributes=" + InsertNames.value + "&InsertValues=" + InsertValues.value + "&InsertTable=" + selectedTable;
+    window.location = url;
+    Inc+=1;
+}
+function SearchListener() {
+    refreshUserValues();
+    //document.getElementById("Display").innerHTML = "SEARCH: " + SearchText.value + " IN ";
+    var selectedTable = TableNames[DropDownBox.value];
+    // Get DB values from Django, and display 
+    var url= "http://smalldata411.web.illinois.edu/search-query/?SearchVal=" + SearchText.value + "&SearchTable=" + selectedTable + "&Attributes=" + SearchNames.value;
+    window.location = url;
+    //document.getElementById("Display").innerHTML = "?SearchVal=" + SearchText.value + "&SearchTable=" + selectedTable + "&Attributes=" + SearchNames.value;
+    Inc+=1;
+}
+
+function UpdateListener(){
+    refreshUserValues();
+    var selectedTable = TableNames[DropDownBox.value];
+    document.getElementById("Display").innerHTML = "?UpdateAtt=" + UpdateAttributes.value + "&UpdateVals=" + UpdateValues.value + "&UpdateCondition=" + UpdateCondition.value + "&UpdateTable=" + selectedTable;
+    var url= "http://smalldata411.web.illinois.edu/update-query/?UpdateAttributes=" + UpdateAttributes.value + "&UpdateValues=" + UpdateValues.value + "&UpdateCondition=" + UpdateCondition.value + "&UpdateTable=" + selectedTable;
+    window.location = url;
+    Inc+=1;
+}
+
+function DeleteListener(){
+    refreshUserValues();
+    var selectedTable = TableNames[DropDownBox.value];
+    document.getElementById("Display").innerHTML = "?DeleteAttributes=" + DeleteAttributes.value + "&DeleteCondition=" + DeleteCondition.value + "&UpdateTable=" + selectedTable;
+    var url= "http://smalldata411.web.illinois.edu/delete-query/?DeleteAttributes=" + DeleteAttributes.value + "&DeleteCondition=" + DeleteCondition.value + "&DeleteTable=" + selectedTable;
+    window.location = url;
+    Inc+=1; 
+}
+
+function SpotifyLoginListner(){
+
+    var url = "spotify-login/";
+    window.location = url;
+
+}
+
+function YoutubeLoginListner(){
+
+    var url = "youtube-login/";
+    window.location = url;
+
+}
+
+function GraphOneListener(){
+    
+    var url = "graph-one/";
+    window.location = url;
+    
+}
+
+</script>
+</head>
+<body>
+<p><span style="font-size:48px;"><span style="color:#0000FF;"><span style="font-family:comic sans ms,cursive;"><b>SMALL DATA</b></span></span></span></p>
+
+<p>{% block content %} {% if user.is_authenticated %} Hi {{ user.username }}!</p>
+
+<p><a href="{% url 'logout' %}">logout</a></p>
+
+<p><input id="LoginToSpotify" name="LoginToSpotify" onclick="SpotifyLoginListner()" type="button" value="Login to Spotify / Refresh" /></p>
+
+<p><input id="LoginToYoutube" name="LoginToYoutube" onclick="YoutubeLoginListner()" type="button" value="Login to Youtube / Refresh" /></p>
+
+<p>{% else %}</p>
+
+<p>You are not logged in</p>
+
+<p><a href="{% url 'login' %}">login</a> <a href="{% url 'signup' %}">Signup</a> {% endif %} {% endblock %}</p>
+
+<p><b>Table in DB</b></p>
+
+<p><input name="displayGraph1" id ="displayGraph1" type="button" value="Graph Test" onclick="GraphOneListener()" /></p>
+
+<p></p>
+
+<p><b><select id="DropDownBox" name="Databases"><option selected="selected" value="0">Users</option><option value="1">TopSongsMeta</option><option value="2">SpotifyAcc</option><option value="3">SoundCloudAcc</option><option value="4">YoutubeAcc</option><option value="5">PandoraAcc</option></select>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</b></p>
+
+<p></p>
+
+<p><strong>SEARCH</strong></p>
+
+<p><b><input id="SearchText" name="SearchVal" type="text" value="Search Value" /><input id="AttributeNames" name="AttributeNames" type="text" value="(Att 1, Att 2, ...)" />&nbsp;<input id="SearchButton" name="SearchButton" onclick="SearchListener()" type="button" value="Search" /></b></p>
+
+<p></p>
+
+<p><b>INSERT INTO:&nbsp;</b></p>
+
+<p><input id="FieldNames" name="FieldNames" type="text" value="(Att 1, Att 2, ... )" />&nbsp;<input id="FieldValues" name="FieldValues" type="text" value="(Val 1, Val 2, ... )" />&nbsp;<input id="InsertButton" name="InsertButton" onclick="InsertListener()" type="button" value="Insert" /></p>
+
+<p></p>
+
+<p><strong>UPDATE:&nbsp;</strong></p>
+
+<p><strong><input id="UpdateAttributes" name="UpdateAttributes" type="text" value="(Att 1, Att 2, ...)" />&nbsp;TO&nbsp;<input id="UpdateValues" name="UpdateValues" type="text" value="(Val 1, Val 2, ...)" />&nbsp;WHERE&nbsp;<input id="UpdateCondition" name="UpdateCondition" type="text" value="SQL Condition" />&nbsp;<input id="UpdateButton" name="UpdateButton" onclick="UpdateListener()" type="button" value="Update" /></strong></p>
+
+<p></p>
+
+<p><strong>DELETE:&nbsp;</strong></p>
+
+<p><strong><input id="DeleteAttributes" name="DeleteAttributes" type="text" value="(Att 1, Att 2, ...)" />&nbsp;WHERE&nbsp;<input id="DeleteCondition" name="DeleteCondition" type="text" value="SQL Condition" />&nbsp;<input id="DeleteButton" name="DeleteButton" onclick="DeleteListener()" type="button" value="Delete" /></strong></p>
+
+<p><textarea cols="50" id="Display" name="Display" rows="20">Displays DB modification results like a terminal</textarea></p>
+</body>
+</html>

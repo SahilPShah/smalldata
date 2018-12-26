@@ -1,0 +1,165 @@
+  <!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Music Aggregation</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="http://smalldata411.web.illinois.edu/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="http://smalldata411.web.illinois.edu/static/css/heroic-features.css" rel="stylesheet">
+
+  </head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="http://smalldata411.web.illinois.edu">smalldata: a music aggregation app</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link">Made by:
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Pratik Chaudhari</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Sahil Shah</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Jack Aulabagh	</a>	
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+        <script src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+
+        <div align = "center">
+            <div class="chart-container" style="position: relative; height:40vh; width:40vw">
+                <canvas id="myChart" width="200" height="200"></canvas>
+            </div>
+        </div>
+        <script>
+        var ctx = document.getElementById("myChart");
+        var scatterChart = new Chart(ctx, {
+            type: 'scatter',
+            
+            data: {
+                labels: [{% block names %}
+                        {% if pts %}
+			            {% for song in pts %}
+			            "{{song.2}}",
+                        {% endfor %}
+                        {% endif %}
+                        {% endblock %}
+                    ],
+                datasets: [{
+                    
+                    label: 'Music Clustering',
+                    pointBackgroundColor: "#000099",
+                    pointRadius: 5,
+                    pointHoverRadius: 8,
+                    pointHoverBorderWidth: 20,
+                    data: [
+                        {% block ptslis %}
+                        {% if pts %}
+			            {% for song in pts %}
+                        {
+                        x: {{ song.0 }},
+                        y: {{ song.1 }}
+                    },
+                        {% endfor %}
+                        {% endif %}
+                        {% endblock %}
+                    ]
+                }],
+                
+            },
+            options: {
+                
+                scales: {
+                    xAxes: [{
+                        type: 'linear',
+                        position: 'bottom'
+                    }]
+                },
+                tooltips: {
+                   callbacks: {
+                      label: function(tooltipItem, data) {
+                         console.log(tooltipItem)
+                         var label = data.labels[tooltipItem.index];
+                         return label;
+                      }
+                   }
+                },
+                pan: {
+            // Boolean to enable panning
+            enabled: true,
+
+            // Panning directions. Remove the appropriate direction to disable 
+            // Eg. 'y' would only allow panning in the y direction
+            mode: 'xy'
+        },
+
+        // Container for zoom options
+        zoom: {
+            // Boolean to enable zooming
+            enabled: true,
+
+            // Zooming directions. Remove the appropriate direction to disable 
+            // Eg. 'y' would only allow zooming in the y direction
+            mode: 'xy',
+        }
+            },
+             
+        
+        });
+        </script>
+        
+        
+</div>
+
+
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="http://smalldata411.web.illinois.edu/static/vendor/jquery/jquery.min.js"></script>
+    <script src="http://smalldata411.web.illinois.edu/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    
+
+<div style="margin-top:370px;" align = "center">
+    <div class="container"
+    <p class = "lead">
+            This graph randomly samples 50 of your songs from all over the place, and plots them as a function of how similar they are.
+            If you hover over a point, you will see the songs name and its artist. The x-axis represents the "energy and danceability"
+            of the song. High positive values represent high energy/danceability.  The y-axis represents the song makeup. Positive values are indicative 
+            of a song with a lot of vocals whereas negative ones indicate instrumental songs.
+            These coordinates are generated using our in-house algorithm.
+            We can only do 50 songs at a time due to spotify API and performance limitations.
+        </p>
+    </div>
+    <footer class="py-5 bg-dark">
+      <div class="contaier">
+        <p class="m-0 text-center text-white">Copyright &copy; smalldata@Illinois</p>
+      </div>
+      <!-- /.container -->
+    </footer>
+    </div>
+</body>
+</html>
+
+

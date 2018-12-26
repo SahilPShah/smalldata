@@ -1,0 +1,101 @@
+<!-- FOLLOWS EXAMPLE FROM https://www.youtube.com/watch?v=B4Vmm3yZPgc --> 
+
+{% extends 'base.html' %}
+<script> 
+{% block jquery %}
+var endpoint = '/api/chart/data' //
+var myData = []
+var myLabels = []
+$.ajax({
+    method: "GET",
+    url: endpoint,
+    success: function(data){
+        myLabels = data.labels
+        rawData = data.default_data
+        console.log(rawData)
+        var myData = []
+        for (var i in rawData){
+            var item = rawData[i];
+            myData.push({
+                x: item[0],
+                y: item[1],
+            })
+        }
+        console.log(myData)
+        console.log(myLabels)
+        var ctx = document.getElementById("myChart").getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    label: 'Scatter Dataset',
+                    data: myData,
+                }],
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        type: 'linear',
+                        position: 'bottom'
+                    }]
+                }
+            }
+        })
+        
+    },
+    error: function(error_messages){
+        console.log("Errors, Uh oh.")
+        console.log(error_messages)
+    }
+})
+/*var ctx = document.getElementById("myChart").getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: myLabels,
+        datasets: [{
+            label: '# of Votes',
+            data: myData,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});*/
+
+{% endblock %}
+</script>
+
+{% block content %}
+
+<div class = 'row'> 
+    <div class = 'col-sm-12' url-endpoint = '{% url "chart-data" %}'>
+        <h1>HELLO WORLD</h1>
+        <canvas id="myChart" width="400" height="400"></canvas>
+    </div>
+</div>
+
+{% endblock content %}

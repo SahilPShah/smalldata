@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Music Aggregation</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="static/css/heroic-features.css" rel="stylesheet">
+
+  </head>
+  <script>
+    function SpotifyLoginListner(){
+        var url = "spotify-login/";
+        window.location = url;
+    }
+  </script>
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="#">smalldata: a music aggregation app</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link">Made by:
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Pratik Chaudhari</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Sahil Shah</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Jack Aulabagh	</a>	
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+      <!-- Jumbotron Header -->
+      <header class="jumbotron my-4">
+        <h1 class="display-3">Gain an insight into your music listening tendencies.</h1>
+        <p class="lead">
+            This web application allows you to view and reflect on your music tastes from various services. Currently, we scrape 
+            data from your youtube and spotify accounts, in order to generate recommendations by feeding it through the spotify
+            recommendations API. In order for this to work, first you have to make an account on this website. Then, you have to login
+            to spotify and youtube. On youtube, you should make a playlist titled 'smalldata' (without the quotes) that will tell
+            our app the exact songs we should analyze. Now, you should have some recommendations in the bottom-most table!
+        </p>
+        <p class = "lead">{% block content %} {% if user.is_authenticated %} <b>Hi {{ user.username }}!</b></p>
+
+        <p><a href="{% url 'logout' %}" class="btn btn-danger btn-lg">logout</a></p>
+        
+        <p>{% else %}</p>
+        
+        <p class="lead"> <b>You are not logged in</b></p>    
+        <p><a href="{% url 'login' %}" class="btn btn-primary btn-lg">login</a> <a href="{% url 'signup' %}" class="btn btn-primary btn-lg">Signup</a> {% endif %} {% endblock %}</p>
+         </p>
+      </header>
+
+      <!-- Page Features -->
+      <div class="row text-center pull-right">
+
+ 		
+
+      </div>
+      <!-- /.row -->
+
+
+
+      	<div class="row w-200" align = "center" style="width: 1375px;">
+		<div class="col-md-5" align = "left">
+			<div style="overflow:auto; height:300px;">
+			<table class="table">
+			  <thead>
+			    <tr>
+			      <th scope="col" style="width: 25%">Title</th>
+			      <th scope="col" style="width: 25%">Artist</th>
+			      <th scope="col" style="width: 15%">Playlist</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			      {% block spotlisty %}
+			      {% if spotlist %}
+			      {% for song in spotlist %}
+			      <tr>
+			      <td> {{ song.0 }}</td>
+			      <td> {{ song.1 }}</td>
+			      <td> {{ song.2 }}</td>
+			      </tr>
+			      {% endfor %}
+			      {% endif %}
+			      {% endblock %}
+
+			  </tbody>
+			</table>
+			</div>
+			<p align = "center">
+			    {% block content2 %} {% if user.is_authenticated %}
+				<a href="/spotify-login" class="btn btn-primary btn-lg" role="button" aria-pressed="false" >Login to Spotify / Refresh song list</a>
+				{% else %}
+				<a href="#" class="btn btn-primary btn-lg disabled" role="button" aria-pressed="false" >Login to Spotify</a>
+				{% endif %} {% endblock %}
+			</p>
+		</div>
+
+		<div class="col-md-5" align = "right" >
+			<div style="overflow:auto; height:300px;">
+			<table class="table">
+			  <thead>
+			    <tr>
+			      <th scope="col" style="width: 25%">Title</th>
+			      <th scope="col" style="width: 25%">Artist</th>
+			      <th scope="col" style="width: 15%">Playlist</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			      {% block youtubelisty %}
+			      {% if youtubelist %}
+			      {% for song in youtubelist %}
+			      <tr>
+			      <td> {{ song.0 }}</td>
+			      <td> {{ song.1 }}</td>
+			      <td> {{ song.2 }}</td>
+			      </tr>
+			      {% endfor %}
+			      {% endif %}
+			      {% endblock %}
+
+			  </tbody>
+			</table>
+			</div>
+			<p align = "center">
+			    {% block content1 %} {% if user.is_authenticated %}
+				<a href="/youtube-login" class="btn btn-primary btn-lg" role="button" aria-pressed="false" >Login to Youtube / Refresh song list</a>
+				{% else %}
+				<a href="#" class="btn btn-primary btn-lg disabled" role="button" aria-pressed="false" >Login to Youtube</a>
+				{% endif %} {% endblock %}
+			</p>
+		</div>
+
+		<div class="col-md-10" align = "center">
+			<div style="overflow:auto; height:300px;margin-top:20px;">
+			<table class="table">
+			  <thead>
+			    <tr>
+			      <th align="center" scope="col" style="width: 15%" >Title</th>
+			      <th align="center" scope="col" style="width: 15%">Artist</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			    {% block reclisty %}
+			      {% if recommendations %}
+			      {% for song in recommendations %}
+			      <tr>
+			      <td> <a href = {{ song.2 }} target="_blank">{{ song.0 }}</a></td>
+			      <td> {{ song.1 }}</td>
+			      </tr>
+			      {% endfor %}
+			      {% endif %}
+			      {% endblock %}
+			  </tbody>
+			</table>
+			</div>
+			<p align = "center">
+				{% block content123 %} 
+				{% if user.is_authenticated %}
+				<a href="" class="btn btn-primary btn-lg" role="button" aria-pressed="false" >Regenerate recommendations</a>
+				{% else %}
+				<a href = "#" class="btn btn-primary btn-lg disabled" role="button" aria-pressed="false" >Regenerate recommendations</a>
+				{% endif %} {% endblock %}
+				<a href = "/graph" class="btn btn-primary btn-lg" role="button" aria-pressed="false" >Generate graph</a>
+
+			</p>
+		</div>
+		
+	</div>
+
+    </div>
+    <!-- /.container -->
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; smalldata@Illinois</p>
+      </div>
+      <!-- /.container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="static/vendor/jquery/jquery.min.js"></script>
+    <script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  </body>
+
+</html>

@@ -1,0 +1,1 @@
+/home/smalldata411/phantomjs/bin/phantomjs: error while loading shared libraries: libfontconfig.so.1: cannot open shared object file: No such file or directory

@@ -1,0 +1,1 @@
+from aggserv_project.wsgi import application
